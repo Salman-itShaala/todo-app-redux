@@ -93,11 +93,16 @@ function TodoComponent({ title, id, done }) {
     <div className="flex gap-8 text-slate-50 items-center">
       <p className="w-1/2">{title} </p>
       <button
-        className="border border-green-400 px-4 py-2 rounded-md font-bold text-green-400
-        hover:bg-slate-500"
+        className={`${
+          done
+            ? " border-red-500 text-red-500"
+            : "border-green-400 text-green-400"
+        } 
+        px-4 py-2 rounded-md font-bold 
+        hover:bg-slate-500 border `}
         onClick={() => handleDone(id)}
       >
-        Done
+        {done ? "Mark as Incomplete" : "Mark as comeplete"}
       </button>
       <button
         className="border border-red-400 px-4 py-2 rounded-md font-bold text-red-400
