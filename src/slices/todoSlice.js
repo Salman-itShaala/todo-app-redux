@@ -9,7 +9,7 @@ export const getTodos = createAsyncThunk("todo/getTodos", async () => {
   return data;
 });
 
-// extraReducer = (builder) => builder.addCase(getTodos.reject, (action, state)=>{}).addCase()
+// extraReducers = (builder) => builder.addCase(getTodos.reject, (action, state)=>{}).addCase()
 
 // rejected
 // pending
@@ -19,8 +19,8 @@ const todoSlice = createSlice({
   name: "todo",
   initialState: {
     tasks: [],
-    loading: "idle", // loading, idle
-    error: null,
+    status: "idle", // loading, failed, success
+    error: "",
   },
   reducers: {
     addTodo: (state, action) => {
@@ -59,18 +59,18 @@ const todoSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getTodos.pending, (state, action) => {
-        state.loading = "loading";
+        state.status = "loading";
       })
       .addCase(getTodos.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.tasks = action.payload.todos;
-        state.loading = "not-loading";
+        state.status = "success";
       })
       .addCase(getTodos.rejected, (state, action) => {
-        state.loading = "false";
+        state.status = "failed";
         state.error = "Error while fetching todos.";
       });
   },
+  // builder.addCase().addCase().addCase()
 });
 
 export const { addTodo, deleteTodo, markAsDone } = todoSlice.actions;

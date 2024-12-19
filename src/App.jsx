@@ -8,14 +8,17 @@ function App() {
   const [task, setTask] = useState("");
   const dispatch = useDispatch();
 
-  const todos = useSelector((state) => state.todos.tasks);
+  const todosState = useSelector((state) => state.todos);
+
+  console.log(todosState); // {tasks: [], status: "idle", error: ""}
 
   useEffect(() => {
-    dispatch(getTodos());
-  }, []);
+    if (todosState.status === "idle") {
+      dispatch(getTodos());
+    }
+  }, [todosState.status, dispatch]);
 
   function handleAddTodo() {
-    // {id: nanoid() , todo: "Learn something new today", done: false}
     const todoObj = {
       id: nanoid(),
       todo: task,
@@ -26,6 +29,13 @@ function App() {
     setTask("");
   }
 
+  if (todosState.status === "loading") {
+    return <h1>Loading...</h1>;
+  }
+
+  if (todosState.status === "failed") {
+    return <h1>{todosState.error}</h1>;
+  }
   return (
     <div className="bg-slate-600">
       <h1 className="text-center text-2xl font-bold text-slate-200">
@@ -49,7 +59,7 @@ function App() {
       </div>
       <div className="flex justify-between w-full px-32 min-h-[70vh]">
         <div className="flex flex-col gap-4 w-1/2">
-          {todos.map((todo) => {
+          {todosState.tasks.map((todo) => {
             if (!todo.done) {
               return (
                 <TodoComponent
@@ -64,7 +74,7 @@ function App() {
         </div>
         <div className="w-[1px] bg-slate-400 mx-4"></div>
         <div className="flex flex-col gap-4 w-1/2">
-          {todos.map((todo) => {
+          {todosState.tasks.map((todo) => {
             if (todo.done) {
               return (
                 <TodoComponent
