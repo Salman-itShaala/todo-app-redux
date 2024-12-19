@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
-import { addTodo, deleteTodo, markAsDone } from "./slices/todoSlice";
-import { useState } from "react";
+import { addTodo, deleteTodo, getTodos, markAsDone } from "./slices/todoSlice";
+import { useEffect, useState } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 
 function App() {
@@ -9,6 +9,10 @@ function App() {
   const dispatch = useDispatch();
 
   const todos = useSelector((state) => state.todos.tasks);
+
+  useEffect(() => {
+    dispatch(getTodos());
+  }, []);
 
   function handleAddTodo() {
     // {id: nanoid() , todo: "Learn something new today", done: false}
